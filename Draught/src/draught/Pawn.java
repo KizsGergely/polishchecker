@@ -1,28 +1,43 @@
 package draught;
 
 public class Pawn {
-    String color;
+    int positionX;
+    int positionY;
+    boolean isWhite;
     boolean isCrowned = false;
 
-    public String getColor() {
-        return color;
+    public Pawn(int positionX, int positionY, boolean isWhite) {
+        this.positionX = positionX;
+        this.positionY = positionY;
+        this.isWhite = isWhite;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public int getPositionX() {
+        return positionX;
     }
 
-    public class Coordinates {
-        int x;
-        int y;
+    public void setPositionX(int positionX) {
+        this.positionX = positionX;
     }
 
-    private boolean getIsWhite() {
-        return this.color.equals("white");
+    public int getPositionY() {
+        return positionY;
     }
 
-    private boolean getIsCrowned() {
-        return this.isCrowned;
+    public void setPositionY(int positionY) {
+        this.positionY = positionY;
+    }
+
+    public boolean isWhite() {
+        return isWhite;
+    }
+
+    public void setWhite(boolean white) {
+        isWhite = white;
+    }
+
+    public boolean isCrowned() {
+        return isCrowned;
     }
 
 }
