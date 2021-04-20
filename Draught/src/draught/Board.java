@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Board {
     private int n;
     public Pawn[][] fields;
-    private Scanner scanner;
+    private final Scanner scanner;
     public static int[] lastMove = new int[2];
     public Board() {
         scanner = new Scanner(System.in);

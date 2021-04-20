@@ -1,7 +1,7 @@
 package draught;
 
 import java.util.ArrayList;
-import java.sql.ClientInfoStatus;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Game {
@@ -20,25 +20,43 @@ public class Game {
     public void start() {
         board = new Board();
         board.printBoard();
+        playRound();
     }
 
     public void playRound() {
         System.out.println(this.player + "'s move");
         int[] startPosition = null;
         int[] endPosition = null;
-        boolean isValid = false;
-        while (startPosition == null || endPosition == null || !isValid) {
-            System.out.println("Enter starting coordinates:");
+//        boolean isValid = false;
+//        while (startPosition == null || endPosition == null) {
+            System.out.println("Enter starting coordinate :");
             String start = input.nextLine();
-            System.out.println("Enter target coordinates:");
+            while (!inputCheck(start)) {
+                System.out.println("Please choose valid starting coordinate: ");
+                start = input.nextLine();
+            }
+            System.out.println("Enter target coordinate: ");
             String target = input.nextLine();
+            while (!inputCheck(target)) {
+                System.out.println("Enter a valid target coordinate: ");
+                target = input.nextLine();
+            }
             startPosition = convertPlacement(start);
             endPosition = convertPlacement(target);
+            System.out.println(Arrays.toString(startPosition));
+            System.out.println(Arrays.toString(endPosition));
             //check if move is valid,
-        }
+//        }
         board.movePawn(startPosition[0], startPosition[1], endPosition[0],endPosition[1]);
+        board.printBoard();
 //        checkForWinner();
         swapPlayer();
+    }
+
+    private boolean inputCheck(String input) {
+        System.out.println(input.substring(0, 1).matches("/[0-9]/"));
+//        System.out.println(input.matches("/[0-9]/g"));
+        return input.length() > 1 && input.matches("/[a-z]/i") && input.substring(1).matches("/[0-9]/g");
     }
 
     private void swapPlayer() {
@@ -65,7 +83,7 @@ public class Game {
     public int[] convertPlacement(String coordinate) {
         try {
             char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
-            String letter = coordinate.substring(0, 1).toLowerCase();
+            String letter = coordinate.substring(0, 1);
             int row = new String(alphabet).indexOf(letter);
             int col = Integer.parseInt(coordinate.substring(1)) - 1;
             return new int[]{row, col};
