@@ -75,6 +75,7 @@ public class Board {
         }
     }
 
+
     @Override
     public String toString() {
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -90,45 +91,11 @@ public class Board {
         return builder.toString();
     }
 
-    public void printBoard() {
-        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        for (int i = 0; i < fields[0].length + 1; i++) {
-            if (i == 0) {
-                System.out.print("   ");
-            } else {
-                if (i > 9) {
-                    System.out.print(i + " ");
-                } else {
-                    System.out.print(i + "  ");
-                }
-            }
-        }
-        System.out.println();
-        for (int i = 0; i < fields.length; i++) {
-            System.out.print(alphabet.charAt(i) + " ");
-            for (int j = 0; j < fields[i].length; j++) {
-                if (fields[i][j] == null) {
-                    if ((i + j) % 2 == 0) {
-                        System.out.print(" - ");
-                    } else {
-                        System.out.print("   ");
-                    }
-                } else {
-                    if (fields[i][j].isWhite && !fields[i][j].isCrowned) {
-                        System.out.print(" X ");
-                    } else if (!fields[i][j].isWhite && !fields[i][j].isCrowned) {
-                        System.out.print(" O ");
-                    }
-                }
-            }
-            System.out.println();
-        }
-    }
-
     private boolean validateMove(Pawn pawn, int targetX, int targetY) {
         return (pawn.getPositionY() + pawn.getPositionX()) % 2 == (targetY + targetX) % 2 && //not on white tile AND
                 (pawn.getPositionX() != targetX && pawn.getPositionY() != targetY) && //not the same coordinates AND
-                Math.abs(targetY - pawn.getPositionY()) == 1 && Math.abs(targetX - pawn.getPositionX()) == 1; //diagonal move indicates 1 tile difference from X AND Y
+                (Math.abs(targetY - pawn.getPositionY()) == 1 && Math.abs(targetX - pawn.getPositionX()) == 1) ||
+                (Math.abs(targetY - pawn.getPositionY()) == 2 && Math.abs(targetX - pawn.getPositionX()) == 2); //diagonal move indicates 1 tile difference from X AND Y
     }
 
     private boolean isItEmpty(int x, int y) {
