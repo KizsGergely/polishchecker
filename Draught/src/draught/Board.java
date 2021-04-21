@@ -99,7 +99,7 @@ public class Board {
     }
 
     private boolean isItEmpty(int x, int y) {
-        return fields[x][y] == null;
+        return this.fields[x][y] == null;
     }
 
 
