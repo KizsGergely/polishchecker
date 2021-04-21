@@ -92,10 +92,14 @@ public class Board {
     }
 
     private boolean validateMove(Pawn pawn, int targetX, int targetY) {
-        return (pawn.getPositionY() + pawn.getPositionX()) % 2 == (targetY + targetX) % 2 && //not on white tile AND
-                (pawn.getPositionX() != targetX && pawn.getPositionY() != targetY) && //not the same coordinates AND
-                (Math.abs(targetY - pawn.getPositionY()) == 1 && Math.abs(targetX - pawn.getPositionX()) == 1) ||
-                (Math.abs(targetY - pawn.getPositionY()) == 2 && Math.abs(targetX - pawn.getPositionX()) == 2); //diagonal move indicates 1 tile difference from X AND Y
+        try {
+            return (pawn.getPositionY() + pawn.getPositionX()) % 2 == (targetY + targetX) % 2 && //not on white tile AND
+                    (pawn.getPositionX() != targetX && pawn.getPositionY() != targetY) && //not the same coordinates AND
+                    (Math.abs(targetY - pawn.getPositionY()) == 1 && Math.abs(targetX - pawn.getPositionX()) == 1) ||
+                    (Math.abs(targetY - pawn.getPositionY()) == 2 && Math.abs(targetX - pawn.getPositionX()) == 2); //diagonal move indicates 1 tile difference from X AND Y
+        } catch (NullPointerException e) {
+            return false;
+        } //TODO: put it in try-catch, still crashes, needs fix!
     }
 
     public boolean isItEmpty(int x, int y) {
