@@ -25,39 +25,43 @@ public class Game {
         playRound();
     }
 
+    public String choosePawn() {
+        System.out.println("Player " + this.player + ", choose your pawn to move :");
+        String start = input.nextLine();
+        while (!inputCheck(start)) {
+            System.out.println("Please choose valid starting coordinate: ");
+            start = input.nextLine();
+        } return start;
+    }
+
+    public String chooseTarget(String start) {
+        System.out.println("Player " + this.player + ", choose your target coordinate: ");
+        String target = input.nextLine();
+        while (!inputCheck(target) && !pieceCheck(start)) {
+            System.out.println("Please enter a valid target coordinate: ");
+            target = input.nextLine();
+        } return target;
+    }
+
     public void playRound() {
         System.out.println(this.player + "'s move");
-//        int[] startPosition;
         int[] endPosition;
-//        boolean isValid = false;
-//        while (startPosition == null || endPosition == null) {
         while (!checkForWinner(this.board.fields, this.player)) {
-            System.out.println("Player " + this.player + " Enter starting coordinate :");
-            String start = input.nextLine();
-            while (!inputCheck(start)) {
-                System.out.println("Please choose valid starting coordinate: ");
-                start = input.nextLine();
-            }
-            while (!pieceCheck(start)) {
-                System.out.println("Please choose valid starting coordinate: ");
-                start = input.nextLine();
-            }
+            String start = this.choosePawn();
             this.startPosition = convertPlacement(start);
             this.highlightPawn(this.startPosition);
             this.printBoard();
-            System.out.println("Player " + this.player + " Enter target coordinate: ");
-            String target = input.nextLine();
-            while (!inputCheck(target) && !pieceCheck(start)) {
-                System.out.println("Enter a valid target coordinate: ");
-                target = input.nextLine();
-            }
+            String target = this.chooseTarget(start);
             this.highlightedPawn = null;
             endPosition = convertPlacement(target);
+//            while (!board.isItEmpty(endPosition[0], endPosition[1])) {
+//
+//            }
             //check if move is valid,
 //        }
-            board.movePawn(this.startPosition[0], this.startPosition[1], endPosition[0], endPosition[1]);
+            this.board.movePawn(this.startPosition[0], this.startPosition[1], endPosition[0], endPosition[1]);
             if (captureChecker(this.startPosition[0], this.startPosition[1], endPosition[0], endPosition[1])) {
-                this.board.fields[this.capturedTile[0]][this.capturedTile[1]] = null;
+                removeCaptured();
             }
             this.printBoard();
 //        checkForWinner();
@@ -66,7 +70,7 @@ public class Game {
     }
 
     public void removeCaptured() {
-
+        this.board.fields[this.capturedTile[0]][this.capturedTile[1]] = null;
     }
 
     public boolean captureChecker(int fromX, int fromY, int toX, int toY) {
@@ -74,12 +78,10 @@ public class Game {
         int[] capturedTile = getInts(fromX, fromY, toX, toY);
         if (((this.player == 1) && this.board.fields[capturedTile[0]][capturedTile[1]].isWhite) && this.board.fields[capturedTile[0]][capturedTile[1]] != null
                 && Math.abs(fromX - toX) == 2 && Math.abs(fromY - toY) == 2) {
+            System.out.println("captureChecker did this");
             return true;
-        } else if (((this.player == 2) && !this.board.fields[capturedTile[0]][capturedTile[1]].isWhite) && this.board.fields[capturedTile[0]][capturedTile[1]] != null
-                && Math.abs(fromX - toX) == 2 && Math.abs(fromY - toY) == 2) {
-            return true;
-        }
-        return false;
+        } else return ((this.player == 2) && !this.board.fields[capturedTile[0]][capturedTile[1]].isWhite) && this.board.fields[capturedTile[0]][capturedTile[1]] != null
+                && Math.abs(fromX - toX) == 2 && Math.abs(fromY - toY) == 2;
 
     }
 
@@ -101,7 +103,7 @@ public class Game {
         int row = convertPlacement(input)[0];
         int col = convertPlacement(input)[1];
         if (board.fields[row][col] != null )  {
-        return board.fields[row][col].player != this.player;}
+            return board.fields[row][col].player != this.player;}
         return false;
     }
 
@@ -118,7 +120,7 @@ public class Game {
         }
     }
 
-    public void printBoard() {
+        public void printBoard() {
         for (int i = 0; i < board.fields[0].length + 1; i++) {
             if (i == 0) {
                 System.out.print("   ");
@@ -144,13 +146,16 @@ public class Game {
                     if (i == this.startPosition[0] && j == this.startPosition[1]) {
                         if (this.highlightedPawn != null) {
                             System.out.print(this.highlightedPawn);
+                        } else {
+                            System.out.print(" O "); //hard coded, need to fix this!
+                        }
+                    }
+                    else {
+                        if (board.fields[i][j].isWhite && !board.fields[i][j].isCrowned && !isItHighlighted(i, j)) {
+                            System.out.print(" X ");
+                        } else if (!board.fields[i][j].isWhite && !board.fields[i][j].isCrowned && !isItHighlighted(i, j)) {
+                            System.out.print(" O ");
                         }}
-                        else {
-                    if (board.fields[i][j].isWhite && !board.fields[i][j].isCrowned && !isItHighlighted(i, j)) {
-                        System.out.print(" X ");
-                    } else if (!board.fields[i][j].isWhite && !board.fields[i][j].isCrowned && !isItHighlighted(i, j)) {
-                        System.out.print(" O ");
-                    }}
                 }
             }
             System.out.println();

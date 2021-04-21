@@ -69,7 +69,7 @@ public class Board {
         Pawn pawn = fields[fromX][fromY];
         if (validateMove(pawn, toX, toY) && isItEmpty(toX, toY)) {
             fields[toX][toY] = pawn;
-            fields[fromX][fromY] = null;
+            removePawn(fromX, fromY); //using method now
             pawn.setPositionX(toX);
             pawn.setPositionY(toY);
         }
@@ -98,7 +98,7 @@ public class Board {
                 (Math.abs(targetY - pawn.getPositionY()) == 2 && Math.abs(targetX - pawn.getPositionX()) == 2); //diagonal move indicates 1 tile difference from X AND Y
     }
 
-    private boolean isItEmpty(int x, int y) {
+    public boolean isItEmpty(int x, int y) {
         return this.fields[x][y] == null;
     }
 
