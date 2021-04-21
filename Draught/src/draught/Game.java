@@ -75,6 +75,8 @@ public class Game {
         System.out.println(this.player + "'s move");
         while (!checkForWinner(this.board.fields, this.player)) {
             endPosition = this.stepValidator();
+            //check if move is valid,
+//        }
             this.board.movePawn(this.startPosition[0], this.startPosition[1], endPosition[0], endPosition[1]);
             int distance = this.stepDistance(this.startPosition, endPosition);
             if (distance > 1) {
@@ -127,8 +129,12 @@ public class Game {
     }
 
     private boolean inputCheck(String input) {
-        return input.length() > 1 && input.matches("\\D\\d");
-    }
+        if (input.length() == 2) {
+        return input.length() > 1 && input.matches("\\D\\d");}
+        else if (input.length() == 3) {
+            return input.length() > 1 && input.matches("\\D\\d\\d");
+        } return false;
+        }
 
     private void swapPlayer() {
         if (this.player == 1){
