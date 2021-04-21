@@ -29,6 +29,7 @@ public class Game {
         int[] endPosition = null;
 //        boolean isValid = false;
 //        while (startPosition == null || endPosition == null) {
+        while (!checkForWinner(this.board.fields, this.player)) {
             System.out.println("Enter starting coordinate :");
             String start = input.nextLine();
             while (!inputCheck(start)) {
@@ -47,16 +48,15 @@ public class Game {
             System.out.println(Arrays.toString(endPosition));
             //check if move is valid,
 //        }
-        board.movePawn(startPosition[0], startPosition[1], endPosition[0],endPosition[1]);
-        board.printBoard();
+            board.movePawn(startPosition[0], startPosition[1], endPosition[0], endPosition[1]);
+            board.printBoard();
 //        checkForWinner();
-        swapPlayer();
+            swapPlayer();
+        }
     }
 
     private boolean inputCheck(String input) {
-        System.out.println(input.substring(0, 1).matches("/[0-9]/"));
-//        System.out.println(input.matches("/[0-9]/g"));
-        return input.length() > 1 && input.matches("/[a-z]/i") && input.substring(1).matches("/[0-9]/g");
+        return input.length() > 1 && input.matches("\\D\\d");
     }
 
     private void swapPlayer() {
@@ -97,10 +97,12 @@ public class Game {
         int counter = 0;
         for (Pawn[] row : fields) {
             for (Pawn col : row) {
-                if (player == 1 && col.isWhite) {
-                    counter++;
-                } else if (player == 2 && !col.isWhite) {
-                    counter++;
+                if (col != null) {
+                    if (player == 1 && col.isWhite) {
+                        counter++;
+                    } else if (player == 2 && !col.isWhite) {
+                        counter++;
+                    }
                 }
             }
         }  //counter only checks for number of pieces, return true is there is none
