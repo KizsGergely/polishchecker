@@ -26,15 +26,16 @@ public class Game {
         System.out.println(this.player + "'s move");
         int[] startPosition = null;
         int[] endPosition = null;
-        while (startPosition == null || endPosition == null) {
+        boolean isValid = false;
+        while (startPosition == null || endPosition == null || !isValid) {
             System.out.println("Enter starting coordinates:");
             String start = input.nextLine();
             System.out.println("Enter target coordinates:");
             String target = input.nextLine();
             startPosition = convertPlacement(start);
             endPosition = convertPlacement(target);
+            //check if move is valid,
         }
-//check if move is valid,
         board.movePawn(startPosition[0], startPosition[1], endPosition[0],endPosition[1]);
 //        checkForWinner();
         swapPlayer();
@@ -84,39 +85,45 @@ public class Game {
                     counter++;
                 }
             }
-        }  //counter only checks for number of pieces, return true is there is a loser
-        return counter == 0 || noMoreValidMoves(fields, player);
+        }  //counter only checks for number of pieces, return true is there is none
+        return counter == 0 || validMoves(fields, player).size() == 0; //validMove's size indicates the number of possible steps
     }
 
+    public int[] isItOnBoard(int x, int y) {
+        int[] res = new int[2];
+        try {
+            if (board.fields[x][y] == null) {
+                res[0] = x;
+                res[1] = y;
+                return res;}
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }  return null;
+    }
 
-    public boolean noMoreValidMoves(Pawn[][] fields, int player) {
+    public ArrayList validMoves(Pawn[][] fields, int player) {
         //TODO: loop over each player's pawns
         //check the 4 diagonal squares for each pawn
         //check for possible capture moves
-        ArrayList<Boolean> booleanList;
-        ArrayList<Boolean> whiteValid = new ArrayList<>();
-        ArrayList<Boolean> blackValid = new ArrayList<>();
+        ArrayList<int[]> valid = new ArrayList<>();
+
         for (int i = 0; i < fields.length; i++) {
             for (int j = 0; j < fields[i].length; j++) {
-                if (fields[i][j] != null) { //TODO: IndexOutOfBounds error have to be eliminated!!!!! NO MERCYYYYYYYY!!!!!!!!!!!!
-                    if (player == 1 && fields[i][j].isWhite) {
-                        whiteValid.add((fields[i][j + 1] == null || fields[i][j - 1] == null || fields[i + 1][j] == null || fields[i - 1][j] == null));
-                    } else if (player == 2 && !fields[i][j].isWhite) {
-                        blackValid.add((fields[i][j + 1] == null || fields[i][j - 1] == null || fields[i + 1][j] == null || fields[i - 1][j] == null));
+
+                if (fields[i][j] != null && fields[i][j].whichPlayer() == player) {
+                   if (isItOnBoard(i-1,j-1) != null) {
+                       valid.add(isItOnBoard(i-1,j-1));
+                    } if (isItOnBoard(i-1,j+1) != null) {
+                        valid.add(isItOnBoard(i-1,j+1));
+                    } if (isItOnBoard(i+1,j-1) != null) {
+                        valid.add(isItOnBoard(i+1,j-1));
+                    } if (isItOnBoard(i+1,j+1) != null) {
+                        valid.add(isItOnBoard(i+1,j+1));
                     }
                 }
             }
         }
-        if (player == 1) {
-            booleanList = whiteValid;
-        } else {
-            booleanList = blackValid;
-        }
-        for (boolean permutation : booleanList){
-            if (!permutation) {
-                return false;
-            }
-        } return true;
+        return valid;
     }
 
 
@@ -124,7 +131,8 @@ public class Game {
 
         Game game = new Game();
         game.start();
-        System.out.println(game.noMoreValidMoves(game.getBoard().fields, game.player));
+        System.out.println(game.validMoves(game.getBoard().fields, game.player).size());
+
 //        while (!checkForWinner(fields, game.player)) {
 //            game.playRound();
 //

@@ -25,7 +25,7 @@ public class Board {
         for (int i = 0; i < fields.length; i++) {
             for (int j = 0; j < fields[0].length; j++) {
                 if ((i + j) % 2 != 0) {
-                    fields[i][j] = new Pawn(i, j, false);
+                    fields[i][j] = new Pawn(i, j, false, 2);
                     count++;
                     if (count == n * 2) {
                         break myBreakLabelBlack;
@@ -40,7 +40,7 @@ public class Board {
         for (int i = fields.length - 1; i >= 0; i--) {
             for (int j = fields[0].length - 1; j >= 0; j--) {
                 if ((i + j) % 2 != 0) {
-                    fields[i][j] = new Pawn(i, j, true);
+                    fields[i][j] = new Pawn(i, j, true, 1);
                     count++;
                     if (count == n * 2) {
                         break myBreakLabelWhite;
