@@ -52,12 +52,13 @@ public class Game {
         String target = this.chooseTarget(start);
         int [] endPosition = convertPlacement(target);
         this.highlightedPawn = null;
-        while (!board.isItEmpty(endPosition[0], endPosition[1])) {
+        while (!this.board.isItEmpty(endPosition[0], endPosition[1])) {
+            printBoard();
             System.out.println("Impossible step. Please revise your decision. ");
             start = this.choosePawn();
             this.startPosition = convertPlacement(start);
             this.highlightPawn(this.startPosition);
-            this.printBoard();
+            printBoard();
             target = this.chooseTarget(start);
             endPosition = convertPlacement(target);
             this.highlightedPawn = null;
@@ -73,7 +74,7 @@ public class Game {
     public void playRound() {
         int[] endPosition;
         System.out.println(this.player + "'s move");
-        while (!checkForWinner(this.board.fields, this.player)) {
+        while (true) {
             endPosition = this.stepValidator();
             //check if move is valid,
 //        }
@@ -86,7 +87,10 @@ public class Game {
                 }
             }
             this.printBoard();
-//        checkForWinner();
+            if (checkForWinner(this.board.fields, this.player)) {
+                System.out.println("Player " + this.player + " has won! But life is meaningless anyway. Enjoy yourself.");
+                break;
+            }
             swapPlayer();
         }
     }
@@ -133,9 +137,9 @@ public class Game {
 
     private boolean inputCheck(String input) {
         if (input.length() == 2) {
-        return input.length() > 1 && input.matches("\\D\\d");}
+        return input.matches("\\D\\d");}
         else if (input.length() == 3) {
-            return input.length() > 1 && input.matches("\\D\\d\\d");
+            return input.matches("\\D\\d\\d");
         } return false;
         }
 
@@ -267,11 +271,19 @@ public class Game {
                         valid.add(isItOnBoard(i+1,j-1));
                     } if (isItOnBoard(i+1,j+1) != null) {
                         valid.add(isItOnBoard(i+1,j+1));
+                    }if (isItOnBoard(i-2,j-2) != null) {
+                        valid.add(isItOnBoard(i-2,j-2));
+                    } if (isItOnBoard(i-2,j+2) != null) {
+                        valid.add(isItOnBoard(i-2,j+2));
+                    } if (isItOnBoard(i+1,j-2) != null) {
+                        valid.add(isItOnBoard(i+2,j-2));
+                    } if (isItOnBoard(i+1,j+2) != null) {
+                        valid.add(isItOnBoard(i+2,j+2));
                     }
                 }
             }
         }
-        return valid; //returning with an arraylist indicating possible moves co
+        return valid; //returning with an arraylist indicating possible CAPTURE & NON-CAPTURE moves count
     }
 
 

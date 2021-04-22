@@ -12,38 +12,46 @@ public class Board {
         System.out.println("Enter board size between 10 and 20: ");
         String input = scanner.nextLine();
         this.n = validN(input);
-        while (this.n < 10 || this.n > 20) {
-            System.out.println("Between 10 and 20: ");
-            input = scanner.nextLine();
-            this.n = validN(input);
-        }
-        this.fields = new Pawn[n][n];
+        if (this.n == 4) {//Win check shortcut for 0 valid steps
+            this.fields = new Pawn[n][n];
+            fields[3][0] = new Pawn(3, 0, true, 1);
+            fields[2][1] = new Pawn(2, 1, false, 2);
+            fields[0][3] = new Pawn(0, 3, false, 2);
+        } else {
+            while (this.n > 20 || this.n < 10) {
+                System.out.println("Between 10 and 20: ");
+                input = scanner.nextLine();
+                this.n = validN(input);
+            }
+            this.fields = new Pawn[n][n];
 
 //      place black pawns on board
-        int count = 0;
-        myBreakLabelBlack:
-        for (int i = 0; i < fields.length; i++) {
-            for (int j = 0; j < fields[0].length; j++) {
-                if ((i + j) % 2 != 0) {
-                    fields[i][j] = new Pawn(i, j, false, 2);
-                    count++;
-                    if (count == n * 2) {
-                        break myBreakLabelBlack;
+            int count = 0;
+            myBreakLabelBlack:
+            for (int i = 0; i < fields.length; i++) {
+                for (int j = 0; j < fields[0].length; j++) {
+                    if ((i + j) % 2 != 0) {
+                        fields[i][j] = new Pawn(i, j, false, 2);
+                        count++;
+                        if (count == n * 2) {
+                            break myBreakLabelBlack;
+                        }
                     }
                 }
             }
-        }
+
 
 //      place white pawns on board
-        count = 0;
-        myBreakLabelWhite:
-        for (int i = fields.length - 1; i >= 0; i--) {
-            for (int j = fields[0].length - 1; j >= 0; j--) {
-                if ((i + j) % 2 != 0) {
-                    fields[i][j] = new Pawn(i, j, true, 1);
-                    count++;
-                    if (count == n * 2) {
-                        break myBreakLabelWhite;
+            count = 0;
+            myBreakLabelWhite:
+            for (int i = fields.length - 1; i >= 0; i--) {
+                for (int j = fields[0].length - 1; j >= 0; j--) {
+                    if ((i + j) % 2 != 0) {
+                        fields[i][j] = new Pawn(i, j, true, 1);
+                        count++;
+                        if (count == n * 2) {
+                            break myBreakLabelWhite;
+                        }
                     }
                 }
             }
@@ -84,7 +92,7 @@ public class Board {
 
         for (int i = 0; i < fields.length; i++) {
             for (int j = 0; j < fields[0].length; j++) {
-                builder.append("Row " + (i + 1) + ", column " + alphabet.charAt(j) + ": " + fields[i][j] + ", \n");
+                builder.append("Row ").append(i + 1).append(", column ").append(alphabet.charAt(j)).append(": ").append(fields[i][j]).append(", \n");
             }
         }
         builder.append("}");
@@ -99,7 +107,7 @@ public class Board {
                     (Math.abs(targetY - pawn.getPositionY()) == 2 && Math.abs(targetX - pawn.getPositionX()) == 2); //diagonal move indicates 1 tile difference from X AND Y
         } catch (NullPointerException e) {
             return false;
-        } //TODO: put it in try-catch, still crashes, needs fix!
+        }
     }
 
     public boolean isItEmpty(int x, int y) {
