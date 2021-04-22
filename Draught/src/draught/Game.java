@@ -121,11 +121,14 @@ public class Game {
     }
 
     private boolean pieceCheck(String input) {
-        int row = convertPlacement(input)[0];
-        int col = convertPlacement(input)[1];
-        if (board.fields[row][col] != null )  {
-            return board.fields[row][col].player != this.player;}
-        return false;
+        try {
+            int row = convertPlacement(input)[0];
+            int col = convertPlacement(input)[1];
+            if (board.fields[row][col] != null )  {
+                return board.fields[row][col].player != this.player;}
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return false;
+        } return false;
     }
 
     private boolean inputCheck(String input) {

@@ -103,7 +103,11 @@ public class Board {
     }
 
     public boolean isItEmpty(int x, int y) {
-        return this.fields[x][y] == null;
+        try {
+            return this.fields[x][y] == null;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return false;
+        }
     }
 
 
