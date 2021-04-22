@@ -53,7 +53,6 @@ public class Game {
         int [] endPosition = convertPlacement(target);
         this.highlightedPawn = null;
         while (!this.board.isItEmpty(endPosition[0], endPosition[1])) {
-            printBoard();
             System.out.println("Impossible step. Please revise your decision. ");
             start = this.choosePawn();
             this.startPosition = convertPlacement(start);
@@ -66,8 +65,6 @@ public class Game {
     }
 
     private int stepDistance(int[] start, int[] end) {
-        System.out.println("start:" + Arrays.toString(start));
-        System.out.println("end: " + Arrays.toString(end));
         return Math.abs(start[0] - end[0]);
     }
 
@@ -78,14 +75,18 @@ public class Game {
             endPosition = this.stepValidator();
             //check if move is valid,
 //        }
-            this.board.movePawn(this.startPosition[0], this.startPosition[1], endPosition[0], endPosition[1]);
             int distance = this.stepDistance(this.startPosition, endPosition);
             if (distance > 1) {
+                while (!captureChecker(this.startPosition[0], this.startPosition[1], endPosition[0], endPosition[1])) {
+                    System.out.println("That is against the rules! 1 illegal move = 1 spank.");
+                    playRound();
+                }
                 System.out.println("distance: " + distance);
                 if (captureChecker(this.startPosition[0], this.startPosition[1], endPosition[0], endPosition[1])) {
                     removeCaptured();
                 }
             }
+            this.board.movePawn(this.startPosition[0], this.startPosition[1], endPosition[0], endPosition[1]);
             this.printBoard();
             if (checkForWinner(this.board.fields, this.player)) {
                 System.out.println("Player " + this.player + " has won! But life is meaningless anyway. Enjoy yourself.");
@@ -101,12 +102,12 @@ public class Game {
 
     public boolean captureChecker(int fromX, int fromY, int toX, int toY) {
         //check if target coordinate's distance is 2 diagonal from starting coordinate && check if the middle spot has an enemy pawn there
-        int[] capturedTile = getInts(fromX, fromY, toX, toY);
+        int[] capturedTile = getInts(fromX, fromY, toX, toY);  //TODO: check middle square, if own pawn, prevent move
         if (((this.player == 1) && this.board.fields[capturedTile[0]][capturedTile[1]].isWhite) && this.board.fields[capturedTile[0]][capturedTile[1]] != null
-                && Math.abs(fromX - toX) == 2 && Math.abs(fromY - toY) == 2) {
+                && Math.abs(fromX - toX) == 2 && Math.abs(fromY - toY) == 2 && this.board.isItEmpty(toX, toY)) {
             return true;
         } else return ((this.player == 2) && !this.board.fields[capturedTile[0]][capturedTile[1]].isWhite) && this.board.fields[capturedTile[0]][capturedTile[1]] != null
-                && Math.abs(fromX - toX) == 2 && Math.abs(fromY - toY) == 2;
+                && Math.abs(fromX - toX) == 2 && Math.abs(fromY - toY) == 2 && this.board.isItEmpty(toX, toY);
 
     }
 
@@ -179,7 +180,8 @@ public class Game {
                         if (this.highlightedPawn != null) {
                             System.out.print(this.highlightedPawn);
                         } else {
-                            System.out.print(" O "); //TODO: hard coded, need to fix this!
+//                            System.out.print(" Z "); //TODO: hard coded, need to fix this!
+                            printBoard();
                         }
                     }
                     else {

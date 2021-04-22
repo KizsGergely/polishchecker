@@ -102,7 +102,7 @@ public class Board {
     private boolean validateMove(Pawn pawn, int targetX, int targetY) {
         try {
             return (pawn.getPositionY() + pawn.getPositionX()) % 2 == (targetY + targetX) % 2 && //not on white tile AND
-                    (pawn.getPositionX() != targetX && pawn.getPositionY() != targetY) && //not the same coordinates AND
+                    (pawn.getPositionX() != targetX && pawn.getPositionY() != targetY) && //not the same coordinate
                     (Math.abs(targetY - pawn.getPositionY()) == 1 && Math.abs(targetX - pawn.getPositionX()) == 1) ||
                     (Math.abs(targetY - pawn.getPositionY()) == 2 && Math.abs(targetX - pawn.getPositionX()) == 2); //diagonal move indicates 1 tile difference from X AND Y
         } catch (NullPointerException e) {
